@@ -8,14 +8,8 @@ Yet Another Jenkins Dockerfile
 
 ```bash
 $ sudo docker build -f Dockerfile -t flugel-fun
-$ sudo docker run -it flugel-fun
+$ sudo docker run -d -p 8080:8080 flugel-fun
 ```
 
-   Once Entered Docker interactive session type:  
-
-```bash
-$ ./start.sh
-```
-	
-   It will run startup shell script, which autodestroys when finished  
-
+   Now open [Jenkins](https://localhost:8080) in your browser  
+	 You can log in with admin:admin (login:password)
