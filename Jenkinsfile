@@ -1,11 +1,15 @@
+#!groovy
+import jenkins.automation.builders.*
+import jenkins.automation.utils.EnvironmentUtils
 
-node {
-	git url: 'https://github.com/flugel-it/fun-with-jenkins2.git'
-	stage "Build"
-	sh "scripts/deploy.sh"
-	stage "Test"
-	sh "scripts/test.sh"
-	stage "Deploy"
-	sh "scripts/deploy.sh"
+
+def helloJob = new BaseJobBuilder(
+	name: "helloworld",
+	description: "Example job"
+)
+
+helloJob.build(this).with {
+	steps {
+		println("Hello world")
+	}
 }
-
