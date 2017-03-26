@@ -1,8 +1,3 @@
-- debug:
-    msg: "{{ansible_pkg_mgr}}"
-- debug:
-    msg: "{{ansible_service_mgr}}"
-
 - name: Install pip
   package:
     name: 
