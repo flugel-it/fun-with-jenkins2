@@ -1,0 +1,34 @@
+- debug:
+    msg: "{{ansible_pkg_mgr}}"
+- debug:
+    msg: "{{ansible_service_mgr}}"
+
+- include: apt-yum.yml
+  when: 
+    ansible_pkg_mgr == 'apt' or 
+    ansible_pkg_mgr == 'yum'
+
+- include: pacman.yml
+  when: 
+    - ansible_pkg_mgr == "pacman"
+
+- name: Start docker on boot
+  systemd: 
+    name: dockerd 
+    state: started 
+    enabled: yes
+  when: 
+    - ansible_service_mgr == "service"
+
+- name: Start docker on boot
+  service: 
+    name: docker
+    state: started 
+    enabled: yes
+  when: 
+    ansible_service_mgr == "sysvinit" or
+    ansible_service_mgr == "upstart"
+
+- name: Pull an image
+  docker_image:
+    name: "ohopiak/flugel"

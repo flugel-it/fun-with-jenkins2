@@ -1,2 +1,4 @@
 # all swap files
 *.swp
+
+*.retry

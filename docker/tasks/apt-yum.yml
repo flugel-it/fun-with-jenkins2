@@ -1,0 +1,27 @@
+- name: Add docker apt repository key
+  apt_key:
+    url: "https://get.docker.io/gpg" 
+    state: present
+
+- name: Add docker apt repository
+  apt_repository: 
+    repo: 'deb http://get.docker.io/ubuntu docker main' 
+    state: present
+
+- name: Update system
+  package: 
+    update_cache: yes 
+  ignore_errors: yes
+
+- name: Install lxc-docker
+  package:
+    name: lxc-docker
+    state: latest
+  ignore_errors: yes
+  register: found_lxc
+
+- name: Install docker
+  package:
+    name: docker
+    state: latest
+  when: found_lxc|failed
