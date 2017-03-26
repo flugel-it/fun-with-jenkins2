@@ -3,22 +3,43 @@
 - debug:
     msg: "{{ansible_service_mgr}}"
 
-- include: apt-yum.yml
+- name: Install pip
+  package:
+    name: 
+      - python-pip
+    state: latest
+
+- include: apt.yml
   when: 
-    ansible_pkg_mgr == 'apt' or 
+    ansible_pkg_mgr == 'apt'
+
+- include: yum.yml
+  when: 
+    ansible_pkg_mgr == 'dnf' or 
     ansible_pkg_mgr == 'yum'
 
 - include: pacman.yml
   when: 
     - ansible_pkg_mgr == "pacman"
 
+- name: Install iptables
+  package:
+    name: 
+      - iptables
+    state: latest
+
+- name: Install docker-py with pip
+  pip:
+    name: docker-py
+
 - name: Start docker on boot
   systemd: 
-    name: dockerd 
+    name: docker 
     state: started 
     enabled: yes
   when: 
     - ansible_service_mgr == "service"
+  ignore_errors: yes
 
 - name: Start docker on boot
   service: 
@@ -28,7 +49,15 @@
   when: 
     ansible_service_mgr == "sysvinit" or
     ansible_service_mgr == "upstart"
+  ignore_errors: yes
 
 - name: Pull an image
   docker_image:
     name: "ohopiak/flugel"
+
+- name: Create a data container
+  docker_container:
+    name: jenkins
+    image: "ohopiak/flugel"
+    state: started
+    exposed_ports: 8080

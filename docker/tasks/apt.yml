@@ -3,6 +3,11 @@
     url: "https://get.docker.io/gpg" 
     state: present
 
+- name: Install apt-transport-https
+  package:
+    name: apt-transport-https
+    state: present
+
 - name: Add docker apt repository
   apt_repository: 
     repo: 'deb http://get.docker.io/ubuntu docker main' 
