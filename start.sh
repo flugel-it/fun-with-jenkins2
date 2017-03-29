@@ -19,7 +19,7 @@ waitFor() {
 
 msg "Starting jenkins..."
 nohup jenkins.sh &
-#waitFor 5
+waitFor 5
 msg "Jenkins ready!"
 cd /var/jenkins_home
 git clone https://github.com/cfpb/jenkins-as-code-starter-project.git
@@ -29,7 +29,7 @@ ls jobs/
 msg "Creating new Jenkins job..."
 ./gradlew rest \
 	-DbaseUrl=http://localhost:8080 \
-	-Dpattern=jobs/helloworld.groovy \
+	-Dpattern=Jenkinsfile \
 	-Dusername=admin \
 	-Dpassword=admin 
 msg "COMPLETE! Autoremoving"

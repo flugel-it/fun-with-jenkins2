@@ -1,21 +1,22 @@
+
+- include: apt.yml
+  when: 
+    ansible_pkg_mgr == 'apt'
+
+- include: pacman.yml
+  when: 
+    - ansible_pkg_mgr == "pacman"
+
 - name: Install pip
   package:
     name: 
       - python-pip
     state: latest
 
-- include: apt.yml
-  when: 
-    ansible_pkg_mgr == 'apt'
-
 - include: yum.yml
   when: 
     ansible_pkg_mgr == 'dnf' or 
     ansible_pkg_mgr == 'yum'
-
-- include: pacman.yml
-  when: 
-    - ansible_pkg_mgr == "pacman"
 
 - name: Install iptables
   package:
@@ -53,6 +54,6 @@
 - name: Create a data container
   docker_container:
     name: jenkins
-    image: "ohopiak/flugel"
+    image: "ohopiak/flugel:latest"
     state: started
-    exposed_ports: 8080
+    ports: "8080:8080"

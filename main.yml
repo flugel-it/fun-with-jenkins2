@@ -1,6 +1,6 @@
 ---
 - name: Setup docker
   hosts:
-    - all
+    - webserver
   roles:
     - docker
