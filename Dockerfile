@@ -15,4 +15,5 @@ RUN \
 		build-flow-plugin 
 USER jenkins
 WORKDIR /var/jenkins_home/
-CMD ./start.sh && rm start.sh && bash
+ENTRYPOINT ["/bin/bash", "-c"]
+CMD ["./start.sh && tail -f /dev/null"]

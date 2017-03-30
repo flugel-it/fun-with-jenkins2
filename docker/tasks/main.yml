@@ -49,7 +49,7 @@
 
 - name: Pull an image
   docker_image:
-    name: "ohopiak/flugel"
+    name: "ohopiak/flugel:latest"
 
 - name: Create a data container
   docker_container:
@@ -57,3 +57,4 @@
     image: "ohopiak/flugel:latest"
     state: started
     ports: "8080:8080"
+    tty: yes

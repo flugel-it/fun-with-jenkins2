@@ -69,7 +69,7 @@ resource "aws_instance" "web" {
 		Name = "${var.environment}"
 	}
 	provisioner "local-exec" {
-		command = "sleep 30 && cd .. && echo -e \"[webserver]\n${aws_instance.web.public_ip} ansible_connection=ssh ansible_ssh_user=ubuntu\n\" > inventory &&  echo yes | ansible-playbook -s -i inventory main.yml"
+		command = "sleep 30 && cd .. && echo -e \"[webserver]\n${aws_instance.web.public_ip} ansible_connection=ssh ansible_ssh_user=ubuntu\n\" > inventory &&  ansible-playbook -s -i inventory main.yml"
 	}
 }
 

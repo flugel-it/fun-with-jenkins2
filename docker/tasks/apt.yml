@@ -3,6 +3,7 @@
     url: "https://get.docker.io/gpg" 
     state: present
     validate_certs: false
+  register: result
   ignore_errors: yes
 
 - name: Install apt-transport-https
@@ -15,6 +16,7 @@
   apt_repository: 
     repo: 'deb http://get.docker.io/ubuntu docker main' 
     state: present
+  when: not result|failed
   ignore_errors: yes
 
 - name: Update system
@@ -27,7 +29,7 @@
     name: lxc-docker
     state: latest
   ignore_errors: yes
-  register: found
+  when: not result|failed
 
 - name: Install docker.io
   package:
@@ -35,7 +37,6 @@
     state: latest
     force: yes
   ignore_errors: yes
-  when: found|failed
   register: found
 
 - name: Install docker

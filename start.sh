@@ -5,21 +5,21 @@ msg () {
 }
 
 waitFor() {
-	for i in $(seq 1 $1); do
-		msg "Wait       \e[1A"
+	for i in $(seq $1 -1 1); do
+		msg "Wait     $i        \e[1A"
 		sleep 0.25
-		msg "Wait.      \e[1A"
+		msg "Wait.    $i        \e[1A"
 		sleep 0.25
-		msg "Wait..     \e[1A"
+		msg "Wait..   $i        \e[1A"
 		sleep 0.25
-		msg "Wait...    \e[1A"
+		msg "Wait...  $i        \e[1A"
 		sleep 0.25
 	done
 }
 
 msg "Starting jenkins..."
 nohup jenkins.sh &
-waitFor 5
+waitFor 60
 msg "Jenkins ready!"
 cd /var/jenkins_home
 git clone https://github.com/cfpb/jenkins-as-code-starter-project.git
@@ -29,7 +29,7 @@ ls jobs/
 msg "Creating new Jenkins job..."
 ./gradlew rest \
 	-DbaseUrl=http://localhost:8080 \
-	-Dpattern=Jenkinsfile \
+	-Dpattern=jobs/helloworld.groovy \
 	-Dusername=admin \
 	-Dpassword=admin 
-msg "COMPLETE! Autoremoving"
+
