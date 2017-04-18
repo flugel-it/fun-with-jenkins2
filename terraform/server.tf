@@ -6,36 +6,69 @@ provider "aws" {
 	region = "${var.aws_region}"
 }
 
+resource "aws_vpc" "default" {
+	cidr_block = "172.15.0.0/16"
+}
+
+resource "aws_internet_gateway" "default" {
+	vpc_id = "${aws_vpc.default.id}"
+}
+
+resource "aws_subnet" "eu-central-1a-public" {
+	vpc_id = "${aws_vpc.default.id}"
+
+	cidr_block = "172.15.0.0/24"
+	availability_zone = "eu-central-1a"
+}
+
+resource "aws_route_table" "eu-central-1-public" {
+	vpc_id = "${aws_vpc.default.id}"
+
+	route {
+		cidr_block = "0.0.0.0/0"
+		gateway_id = "${aws_internet_gateway.default.id}"
+	}
+}
+
 resource "aws_security_group" "default" {
-	vpc_id = "${var.vpc_id}"
+	vpc_id = "${aws_vpc.default.id}"
 	name = "sg_${var.environment}"
-  # HTTP access from anywhere
+  # SSH and HTTP access from anywhere
   ingress {
     from_port = 22
     to_port = 22
     protocol = "tcp"
-    cidr_blocks = ["${var.allowed_ip}"]
+    cidr_blocks = ["${0.0.0.0/0}"]
   }
   ingress {
     from_port = 8080
     to_port = 8080
     protocol = "tcp"
-    cidr_blocks = ["${var.allowed_ip}"]
+    cidr_blocks = ["${0.0.0.0/0}"]
   }
 
   # outbound internet access
-  egress {
-    from_port = 8080
-    to_port = 8080
-    protocol = "tcp"
-    cidr_blocks = ["${var.allowed_ip}"]
-  }
 	egress {
     from_port = 0
     to_port = 0
     protocol = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+	
+	# NAT
+	ingress {
+		from_port = 0
+		to_port = 65535
+		protocol = "tcp"
+		cidr_blocks = ["${aws_subnet.eu-central-1a-private.cidr_block}"]
+	}
+	ingress {
+		from_port = 0
+		to_port = 65535
+		protocol = "tcp"
+		cidr_blocks = ["${aws_subnet.eu-central-1a-private.cidr_block}"]
+	}
+	
 	tags {
 		Name = "sg-${var.environment}"
 	}
@@ -62,8 +95,10 @@ resource "aws_key_pair" "auth-key" {
 resource "aws_instance" "web" {
 	ami = "${data.aws_ami.ubuntu.id}"
   vpc_security_group_ids = ["${aws_security_group.default.id}"]
-	subnet_id = "${var.subnet_id}"
+	subnet_id = "${aws_subnet.eu-central-1a-public.id}"
 	instance_type = "${var.app_instance_type}"
+	availability_zone = "eu-central-1a"
+	associate_public_ip_address = true
 	key_name = "${aws_key_pair.auth-key.key_name}"
 	tags {
 		Name = "${var.environment}"
@@ -73,3 +108,7 @@ resource "aws_instance" "web" {
 	}
 }
 
+resource "aws_eip" "web" {
+	instance = "${aws_instance.web.id}"
+	vpc = true
+}
