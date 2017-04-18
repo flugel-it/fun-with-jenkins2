@@ -24,13 +24,6 @@ variable "aws_region" {
 DESC
 }
 
-variable "vpc_id" {
-	description = <<DESC
-	The id of the VPC that 
-	the desired security group belongs to
-DESC
-}
-
 variable "app_instance_type" {
 	description = <<DESC
 	The app instance type
@@ -44,11 +37,3 @@ variable "public_key_path" {
 	Example: "~/.ssh/id_rsa.pub"
 DESC
 }
-
-variable "allowed_ip" {
-	description = <<DESC
-	The IP for which you allow the connection
-DESC
-}
-
-variable "subnet_id" {}
