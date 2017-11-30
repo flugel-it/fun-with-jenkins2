@@ -14,6 +14,10 @@ import javaposse.jobdsl.plugin.*;
 import hudson.security.csrf.DefaultCrumbIssuer;
 
 jenkins = Jenkins.instance;
+jenkins.save();
+
+GlobalConfiguration.all().get(GlobalJobDslSecurityConfiguration.class).useScriptSecurity=false
+GlobalConfiguration.all().get(GlobalJobDslSecurityConfiguration.class).save()
 
 credentialsStore = Jenkins.instance.getExtensionList(com.cloudbees.plugins.credentials.SystemCredentialsProvider.class)[0];
 privateKey = new BasicSSHUserPrivateKey(CredentialsScope.GLOBAL,"jenkins-key","jenkins",new BasicSSHUserPrivateKey.FileOnMasterPrivateKeySource('/opt/id_rsa'),"","jenkins ssh key")
