@@ -30,7 +30,7 @@ $ sudo apt update
 ### Finally run the command to install docker:
 
 ```
-$ sudo apt install docker-engine
+$ sudo apt install docker-ce -y
 ```
 
 ### You can verify if docker is installed by running the following command:
