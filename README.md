@@ -12,7 +12,7 @@ docker run -p 8080:8080  jenkins:latest
 ### First you need to add the GPG Key for the Docker repository:
 
 ```
-$ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+$ sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 ```
 
 ### Second you need to add Docker repository to APT file:
