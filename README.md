@@ -75,6 +75,15 @@ $ sudo docker run -p 8080:8080 --name=jenkins-master jenkins
 ### Open your browser and type : http://yourmachineip:8080 , and you may have Jenkins web interface. 
 
 
+### Additional Docker useful commands:
+
+```
+$ sudo docker container ls -all
+
+$ sudo docker container rm "container_id"
+
+```  
+
 
 ### References
 
