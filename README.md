@@ -140,6 +140,21 @@ Ansible uses python-boto library to call AWS API, make sure to have this install
 ```
 $ sudo pip install -U boto
 ```
+Create the following file:
+
+```
+$ sudo touch ~/.boto
+
+``` 
+Then add the AWS API credentials:
+
+```
+[Credentials]
+
+aws_access_key_id = your_key_id
+aws_secret_access_key = your_secret_access_key
+```
+
 
 Also be sure you have python-pip installed, otherwise run:
 ```
