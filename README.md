@@ -92,13 +92,13 @@ https://github.com/linagora/james-jenkins/blob/master/create-dsl-job.groovy
 https://www.digitalocean.com/community/tutorials/como-instalar-e-usar-o-docker-no-ubuntu-16-04-pt
 
 
-## Provisioning a VPS with Ansible
+### Provisioning a VPS with Ansible
 
 #### We are going to provision a VPS in AWS with an ansible playbook, we will have Jenkins running in a docker container. 
 
 #### First you need to authenticate in AWS API by using the following credentials: " access key ID " and " secret access key " you can generate this in your AWS account in : IAM web console , then you copy this credentials to paste locally. 
 
-#### Second  we need to install in our control machine the aws cli tool (make sure you have Python installed already) :
+#### Second  we need to install in our control machine the ' aws cli tool ' (make sure you have Python installed already) :
 
 ``` 
 # sudo pip install awscli
@@ -111,11 +111,12 @@ https://www.digitalocean.com/community/tutorials/como-instalar-e-usar-o-docker-n
 ```
 
 #### Insert what is asked for. In order to test it , run:
+
 ```
 # sudo aws ec2 describe-images
 ``` 
 
-#### You should get a list of the available VPS images, if you receive an Permission error, get back to AWS IAM web console and fix permissions for the user. 
+#### You should get a list of available VPS images, if you receive a permission error, get back to AWS IAM Web Console and fix user permissions. 
 
 
 
