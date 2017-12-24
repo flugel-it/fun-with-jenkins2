@@ -101,23 +101,31 @@ https://www.digitalocean.com/community/tutorials/como-instalar-e-usar-o-docker-n
 #### Second  we need to install in our control machine the ' aws cli tool ' (make sure you have Python installed already) :
 
 ``` 
-# sudo pip install awscli
+$ sudo pip install awscli
 ``` 
 
 #### With both credentials in hand, run:
 
 ```
-# sudo aws configure
+$ sudo aws configure
 ```
 
 #### Insert what is asked for. In order to test it , run:
 
 ```
-# sudo aws ec2 describe-images
+$ sudo aws ec2 describe-images
 ``` 
 
 #### You should get a list of available VPS images, if you receive a permission error, get back to AWS IAM Web Console and fix user permissions. 
 
+
+#### Now we need to install Ansible in the control machine:
+
+```
+$ sudo apt-add-repository ppa:ansible/ansible
+$ apt update
+$ apt install ansible
+```
 
 
 
