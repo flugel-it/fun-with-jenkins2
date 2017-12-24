@@ -127,7 +127,24 @@ $ apt update
 $ apt install ansible
 ```
 
+**Extra instruction:**
+Generate a ssh key pair and import to AWS EC2 console, in order to provision instances from the command line, already associating a key pair.
 
+```
+$ sudo ssh-keygen
+```
+Now go to AWS EC2 console >> Key Pairs and import it.
+
+Ansible uses python-boto library to call AWS API, make sure to have this installed:
+
+```
+$ sudo pip install -U boto
+```
+
+Also be sure you have python-pip installed, otherwise run:
+```
+$ sudo apt install python-pip
+```
 
 
 
