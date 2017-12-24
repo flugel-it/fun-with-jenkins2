@@ -56,19 +56,19 @@ $ sudo /etc/init.d/docker reload
 
 ### Now let´s use run Jenkins in a docker container.
 
-### 1) Let´s pull Jenkins from docker repository:
+1) Let´s pull Jenkins from docker repository:
 
 ```
 $ sudo docker pull jenkins
 ```
 
-### 2) After you have the image, let´s run our first docker container:
+2) After you have the image, let´s run our first docker container:
 
 ```
 $ sudo docker run -p 8080:8080 --name=jenkins-master jenkins
 ```
 
-### You are telling docker to run Jenkins image on port 8080 and setting up the container name. 
+### You are telling docker to run Jenkins image on port 8079 and setting up the container name. 
 
 ### You may now have your Jenkins up and running, follow the instructions to finish Jenkins installation on the Web Interface.
 
