@@ -1,0 +1,35 @@
+---
+
+- hosts: webserver
+  become: true
+  remote_user: ubuntu
+  gather_facts: no
+  pre_tasks:
+    - name: 'install python2'
+      raw: sudo apt-get -y update
+    - name: 'install python'
+      raw: apt install python -y
+
+    - name: update
+      raw: apt update -y
+ 
+    - name: Install Docker Repo
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add Repo
+      raw: add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+
+    - name: update 
+      raw: apt update -y
+
+    - name: install docker ce
+      command: apt install docker.io -y
+
+    - name: pull jenkins image
+      command: docker pull jenkins
+
+    - name: run jenkins image
+      command: docker run -p 8080:8080 -d --name=jenkins-master jenkins
+

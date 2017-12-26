@@ -30,8 +30,8 @@
               to_port: 22
               cidr_ip: 0.0.0.0/0
             - proto: tcp
-              from_port: 80
-              to_port: 80
+              from_port: 8080
+              to_port: 8080
               cidr_ip: 0.0.0.0/0
             - proto: tcp
               from_port: 443
@@ -74,15 +74,8 @@
         args:
           tags:
             Name: webserver
-
-      - name: Update and upgrade apt packages
-        become: true
-        apt:
-         upgrade: yes
-         update_cache: yes
-         
-
-      - name: Update and upgrade apt packages
-        become: true
-        apt: pkg=nginx state=installed update_cache=true
-
+     
+     
+       
+      - name: run another play
+        command: ansible-playbook /etc/ansible/jenkins.yml
