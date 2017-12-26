@@ -5,31 +5,31 @@
   remote_user: ubuntu
   gather_facts: no
   pre_tasks:
-    - name: 'install python2'
+    - name: 'Updating Repository'
       raw: sudo apt-get -y update
-    - name: 'install python'
+    - name: 'Installing Python'
       raw: apt install python -y
 
-    - name: update
+    - name: 'Updating Repository'
       raw: apt update -y
  
-    - name: Install Docker Repo
+    - name: 'Adding Docker APT Key'
       apt_key:
         url: https://download.docker.com/linux/ubuntu/gpg
         state: present
 
-    - name: Add Repo
+    - name: 'Adding Docker Repository'
       raw: add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 
-    - name: update 
+    - name: 'Updating Repository'
       raw: apt update -y
 
-    - name: install docker ce
+    - name: 'Installing Docker CE'
       command: apt install docker.io -y
 
-    - name: pull jenkins image
+    - name: 'Pulling Jenkins Image'
       command: docker pull jenkins
 
-    - name: run jenkins image
+    - name: 'Running Jenkins Docker Container'
       command: docker run -p 8080:8080 -d --name=jenkins-master jenkins
 
