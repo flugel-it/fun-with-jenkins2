@@ -110,7 +110,7 @@ With both credentials in hand, run:
 $ sudo aws configure
 ```
 
-Insert what is asked for. In order to test it , run:
+Insert what is asked for (Access Key ID and Secret Access Key). In order to test it , run:
 
 ```
 $ sudo aws ec2 describe-images
@@ -155,22 +155,28 @@ aws_access_key_id = your_key_id
 aws_secret_access_key = your_secret_access_key
 ```
 
-
 Also be sure you have python-pip installed, otherwise run:
 ```
 $ sudo apt install python-pip
 ```
 
+After Ansible installation you may notice that you have all config files in /etc/ansible.
 
+In this repo we also have a folder called ' ansible ' in order to have our playbook ready you may replace your folder content with our files.
 
+In ' ansible.cfg ' the following configs were done:
 
+```
+host_key_checking = False
+remote_user = ubuntu
+private_key_file = ~/.ssh/id_rsa
+```
 
+The file ' ec2.yml ' is the main playbook that in the end calls ' jenkins.yml ' playbook. In this file you may ajust some settings according to your will regarding the AWS VPS region, instance type, security group name, ssh keypair name, the ports you want to be opened in AWS firewall and so on. The file is much self-explanatory.
 
+In the end of the file you can see ansible calls another playbook : ' jenkins.yml '.
 
-
-
-
-
+Jenkins file may have some configuration you want to change as ' remote_user ' and 'hosts'. You can check all the actions is taking and what is being updated and installed in your VPS, it is also self-explanatory. This is one of Ansible's advantage, it is self-documenting. 
 
 
 ### References:
