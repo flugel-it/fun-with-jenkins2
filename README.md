@@ -182,7 +182,7 @@ Jenkins file may have some configuration you want to change as ' remote_user ' a
 After getting all parameters changed the way you need, run the playbook by issuing :
 
 ```
-# sudo ansible-playbook ec2.ym -vvvv
+# sudo ansible-playbook ec2.yml -vvvv
 ```
 
 Use the ' -vvvv ' for verbose.
