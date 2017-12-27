@@ -179,6 +179,19 @@ In the end of the file you can see ansible calls another playbook : ' jenkins.ym
 Jenkins file may have some configuration you want to change as ' remote_user ' and 'hosts'. You can check all the actions is taking and what is being updated and installed in your VPS, it is also self-explanatory. This is one of Ansible's advantage, it is self-documenting. 
 
 
+After getting all parameters changed the way you need, run the playbook by issuing :
+
+```
+# sudo ansible-playbook ec2.ym -vvvv
+```
+
+Use the ' -vvvv ' for verbose.
+
+When the playbook is over it shows you a RECAP, then you can just check if Jenkins is running by collecting the public ip address of your AWS VPS, or dns, go to your browser and issue: http://x.x.x.x:8080.
+
+Jenkins was set to run in port 8080. If you are presented with a Jenkins set up web interface, everything is working as supposed to. 
+
+
 ### References:
 
 ```
