@@ -98,10 +98,18 @@ We aim to provision a AWS VPS running Jenkins in a Docker container with Ansible
 
 Pre-requisites:
 
-- Create a AWS account
-- Set up a Control Machine
+- Create an AWS account;
+- Set up a Control Machine.
 
 To set up a " Control Machine ", make sure to have the required software installed:
+
+- Ansible
+- Python
+- Python Pip
+- Boto (Python Module)
+- AWS CLI
+
+To proceed with the installation:
 
 ```
 $ sudo apt-add-repository ppa:ansible/ansible
@@ -126,16 +134,17 @@ $ sudo ssh-keygen
 Now, in your AWS Web Console:
 
 - Import the SSH public key (id_rsa.pub) to KEY PAIR Console.
-- Create the IAM User and give permissions to create and control AWS resources. (Reference: https://www.youtube.com/watch?v=Ul6FW4UANGc) 
+- In IAM Conrole create an IAM user and give permissions to create and control AWS resources. (Reference: https://www.youtube.com/watch?v=Ul6FW4UANGc) 
 
 The IAM Console will provide you the following credentials:
 
-aws_access_key_id
-aws_secret_access_key
+- aws_access_key_id
+
+- aws_secret_access_key
 
 These are the credentials you will need in order to manage AWS by Command Line Interface.
 
-With credentials in hand, let's configure our Control Machine:
+With credentials in hand, let's configure:
 
 ```
 $ sudo aws configure
@@ -191,7 +200,7 @@ After changing everything accordingly you may run the playbook by issuing :
 
 Use the ' -vvvv ' for verbose.
 
-When the playbook is over it shows you a RECAP, then you can just check if Jenkins is running by collecting the public ip address of your AWS VPS, or dns, go to your browser and issue: http://x.x.x.x:8080.
+When the playbook is over it shows you a RECAP, then you can just check if Jenkins is running by collecting the public ip address of your AWS VPS, or dns, going to your browser and issuing the following command : http://x.x.x.x:8080.
 
 Jenkins was set to run in port 8080. If you are presented with a Jenkins set up web interface, everything is working as supposed to. 
 
