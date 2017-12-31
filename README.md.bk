@@ -94,48 +94,17 @@ https://www.digitalocean.com/community/tutorials/como-instalar-e-usar-o-docker-n
 
 ### Provisioning a VPS with Ansible.
 
-We aim to provision a AWS VPS running Jenkins in a Docker container with Ansible.
+We are going to provision a VPS in AWS with an ansible playbook, we will have Jenkins running in a docker container. 
 
-Pre-requisites:
+First you need to authenticate in AWS API by using the following credentials: " access key ID " and " secret access key " you can generate this in your AWS account in : IAM web console , then you copy this credentials to paste locally. 
 
-- Create a AWS account
-- Set up a Control Machine
+Second  we need to install in our control machine the ' aws cli tool ' (make sure you have Python installed already) :
 
-To set up a " Control Machine ", make sure to have the required software installed:
-
-```
-$ sudo apt-add-repository ppa:ansible/ansible
-$ sudo apt update
-$ sudo apt install ansible
-
-
-$ sudo apt install python
-$ sudo apt install python-pip
-
-$ sudo pip install upgrade pip
-$ sudo pip install boto
+``` 
 $ sudo pip install awscli
-```
+``` 
 
-Still in your Control Machine, create an SSH Key in order to manage the created servers:
-
-```
-$ sudo ssh-keygen
-```
-
-Now, in your AWS Web Console:
-
-- Import the SSH public key (id_rsa.pub) to KEY PAIR Console.
-- Create the IAM User and give permissions to create and control AWS resources. (Reference: https://www.youtube.com/watch?v=Ul6FW4UANGc) 
-
-The IAM Console will provide you the following credentials:
-
-aws_access_key_id
-aws_secret_access_key
-
-These are the credentials you will need in order to manage AWS by Command Line Interface.
-
-With credentials in hand, let's configure our Control Machine:
+With both credentials in hand, run:
 
 ```
 $ sudo aws configure
@@ -150,7 +119,28 @@ $ sudo aws ec2 describe-images
 You should get a list of available VPS images, if you receive a permission error, get back to AWS IAM Web Console and fix user permissions. 
 
 
-Now you may create and insert the AWS Credentials in the following file:
+Now we need to install Ansible in the control machine:
+
+```
+$ sudo apt-add-repository ppa:ansible/ansible
+$ apt update
+$ apt install ansible
+```
+
+**Extra instruction:**
+Generate a ssh key pair and import to AWS EC2 console, in order to provision instances from the command line, already associating a key pair.
+
+```
+$ sudo ssh-keygen
+```
+Now go to AWS EC2 console >> Key Pairs and import it.
+
+Ansible uses python-boto library to call AWS API, make sure to have this installed:
+
+```
+$ sudo pip install -U boto
+```
+Create the following file:
 
 ```
 $ sudo touch ~/.boto
@@ -165,13 +155,16 @@ aws_access_key_id = your_key_id
 aws_secret_access_key = your_secret_access_key
 ```
 
-With all that set, now we may move on to Ansible files.
+Also be sure you have python-pip installed, otherwise run:
+```
+$ sudo apt install python-pip
+```
 
-By default Ansible files are stored in: /etc/ansible.
+After Ansible installation you may notice that you have all config files in /etc/ansible.
 
-In this repo we  have a folder named ' ansible ' you may copy all the files and replace them in your Control Machine in /etc/ansible.
+In this repo we also have a folder called ' ansible ' in order to have our playbook ready you may replace your folder content with our files.
 
-You may change in ' ansible.cfg ' according to your set up:
+In ' ansible.cfg ' the following configs were done:
 
 ```
 host_key_checking = False
@@ -179,11 +172,14 @@ remote_user = ubuntu
 private_key_file = ~/.ssh/id_rsa
 ```
 
-The ansible playbook ' ec2.yml ' is the main playbook, in the end it calls ' jenkins.yml ' playbook. You may change configuration according to your will regarding the AWS VPS region, instance type, security group name, ssh keypair name, the ports you want to be opened in AWS firewall and so on. The file is much self-explanatory.
+The file ' ec2.yml ' is the main playbook that in the end calls ' jenkins.yml ' playbook. In this file you may ajust some settings according to your will regarding the AWS VPS region, instance type, security group name, ssh keypair name, the ports you want to be opened in AWS firewall and so on. The file is much self-explanatory.
 
-Jenkins file may contain some configurations you might also want to change like:  ' remote_user ' and 'hosts'. 
+In the end of the file you can see ansible calls another playbook : ' jenkins.yml '.
 
-After changing everything accordingly you may run the playbook by issuing :
+Jenkins file may have some configuration you want to change as ' remote_user ' and 'hosts'. You can check all the actions is taking and what is being updated and installed in your VPS, it is also self-explanatory. This is one of Ansible's advantage, it is self-documenting. 
+
+
+After getting all parameters changed the way you need, run the playbook by issuing :
 
 ```
 # sudo ansible-playbook ec2.yml -vvvv
@@ -195,4 +191,10 @@ When the playbook is over it shows you a RECAP, then you can just check if Jenki
 
 Jenkins was set to run in port 8080. If you are presented with a Jenkins set up web interface, everything is working as supposed to. 
 
+
+### References:
+
+```
+https://www.youtube.com/watch?v=Ul6FW4UANGc
+```
 
