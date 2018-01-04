@@ -2,18 +2,18 @@
 
 import jenkins.model.*
 import hudson.security.*
-import jenkins.install.*;
+import jenkins.install.*
 
 def instance = Jenkins.getInstance()
 
 println "--> creating local user 'admin'"
 
-def hudsonRealm = new HudsonPrivateSecurityRealm(false)
+hudsonRealm = new HudsonPrivateSecurityRealm(false)
 hudsonRealm.createAccount('admin','admin')
 instance.setSecurityRealm(hudsonRealm)
 
-def strategy = new FullControlOnceLoggedInAuthorizationStrategy()
-
+strategy = new FullControlOnceLoggedInAuthorizationStrategy()
 instance.setAuthorizationStrategy(strategy)
+
 instance.save()
 

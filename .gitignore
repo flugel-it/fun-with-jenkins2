@@ -7,3 +7,5 @@ id_rsa
 */*tfstate*
 inventory
 
+.idea
+*.gradle

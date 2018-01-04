@@ -1,8 +1,0 @@
-- name: Update system
-  pacman: 
-    update_cache: yes
-
-- name: Install latest docker via pacman
-  pacman: 
-    name: docker 
-    state: installed
