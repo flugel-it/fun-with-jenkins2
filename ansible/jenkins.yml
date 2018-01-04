@@ -1,0 +1,22 @@
+---
+
+- hosts: webserver
+  become: true
+  remote_user: ubuntu
+  pre_tasks:
+    
+#    - name: 'Installing Docker'  
+#      include_role:
+#        name: docker
+    
+    - name: Pull an image
+      docker_image:
+        name: "ohopiak/flugel:latest"
+
+    - name: Create a data container
+      docker_container:
+        name: jenkins
+        image: "ohopiak/flugel:latest"
+        state: started
+        ports: "8080:8080"
+        tty: yes
