@@ -1,8 +1,1 @@
-# all swap files
-*.swp
-
-*.retry
-
-*/*tfstate*
-inventory
-
+id_rsa
