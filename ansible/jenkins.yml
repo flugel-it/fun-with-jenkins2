@@ -5,9 +5,9 @@
   remote_user: ubuntu
   pre_tasks:
     
-#    - name: 'Installing Docker'  
-#      include_role:
-#        name: docker
+    - name: 'Installing Docker'  
+      include_role:
+        name: docker
     
     - name: Pull an image
       docker_image:
