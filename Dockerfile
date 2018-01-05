@@ -6,4 +6,3 @@ ENV JAVA_OPTS -Djenkins.install.runSetupWizard=false
 
 COPY admin.groovy /usr/share/jenkins/ref/init.groovy.d/
 COPY init.groovy /usr/share/jenkins/ref/init.groovy.d/
-
