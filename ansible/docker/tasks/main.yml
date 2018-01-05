@@ -1,22 +1,14 @@
 
-- include_tasks: apt.yml
-  when: 
-    ansible_pkg_mgr == 'apt'
+- name: Test if docker is installed
+  command: docker
+  register: docker_is_installed
+  become: true
+  become_user: root
+  ignore_errors: True
 
-- include_tasks: pacman.yml
-  when: 
-    - ansible_pkg_mgr == "pacman"
-
-- name: Install pip
-  package:
-    name: 
-      - python-pip
-    state: latest
-
-- include_tasks: yum.yml
-  when: 
-    ansible_pkg_mgr == 'dnf' or 
-    ansible_pkg_mgr == 'yum'
+- name: Install docker
+  include_tasks: install.yml
+  when: docker_is_installed|failed
 
 - name: Install iptables
   package:
