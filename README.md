@@ -31,7 +31,7 @@ $ sudo apt update
 Finally run the command to install docker:
 
 ```
-$ sudo apt install docker-io -y
+$ sudo apt install docker.io -y
 ```
 
 You can verify if docker is installed by running the following command:
