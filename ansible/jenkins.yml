@@ -12,7 +12,7 @@
 
     - name: 'Updating Repository'
       raw: apt update -y
- 
+
     - name: 'Adding Docker APT Key'
       apt_key:
         url: https://download.docker.com/linux/ubuntu/gpg
@@ -26,6 +26,9 @@
 
     - name: 'Installing Docker CE'
       command: apt install docker.io -y
+
+    - name: Check if Docker is running.
+      command: name=docker state=started enabled=yes
 
     - name: 'Pulling Jenkins Image'
       command: docker pull jenkins
