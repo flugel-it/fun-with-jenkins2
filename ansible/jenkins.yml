@@ -5,8 +5,10 @@
   remote_user: ubuntu
   gather_facts: no
   pre_tasks:
+
     - name: 'Updating Repository'
       raw: sudo apt-get -y update
+
     - name: 'Installing Python'
       raw: apt install python -y
 
@@ -25,11 +27,17 @@
       raw: apt update -y
 
     - name: 'Installing Docker CE'
-      command: apt install docker.io -y
+      raw: apt install docker.io -y
+
+    - name: 'Create a git directory'
+      raw: mkdir /home/ubuntu/github
+
+    - name: 'Clone Jenkins Repo'
+      raw: git clone https://github.com/barbosacisco/fun-with-jenkins2.git /home/ubuntu/github
 
     - name: 'Pulling Jenkins Image'
-      command: docker pull jenkins
+      command: chdir=/home/ubuntu/github docker build -t jenkins-master -f Dockerfile .
 
-    - name: 'Running Jenkins Docker Container'
-      command: docker run -p 8080:8080 -d --name=jenkins-master jenkins
+    - name: ' Running Jenkins Docker Container'
+      raw: docker run -p 8080:8080 -d --name=jenkins-master jenkins-master
 
