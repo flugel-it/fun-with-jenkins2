@@ -1,0 +1,56 @@
+---
+
+- hosts: webserver
+  become: true
+  remote_user: ubuntu
+  gather_facts: no
+  pre_tasks:
+
+    - name: "Updating Repository"
+      raw: apt update -y
+
+    - name: 'Installing Python'
+      raw: apt install python -y
+
+    - name: "Updating Repository"
+      apt:
+        update_cache: yes
+
+    - name: 'Adding Docker APT Key'
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+#    - name: 'Adding Docker Repository'
+#      raw: add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+
+    - name: "Updating Repository"
+      apt:
+        update_cache: yes
+
+    - name: 'Installing Docker CE'
+      apt:
+        name: docker.io
+        state: present
+
+    - name: Create a git Directory
+      file:
+        path: /home/ubuntu/github
+        state: directory
+
+    - name: "Clone Git Repository"
+      git:
+        repo: 'https://github.com/barbosacisco/fun-with-jenkins2.git'
+        dest: /home/ubuntu/github
+        clone: yes
+
+
+#    - name: 'Clone Jenkins Repo'
+#     raw: git clone https://github.com/barbosacisco/fun-with-jenkins2.git /home/ubuntu/github
+
+    - name: 'Pulling Jenkins Image'
+      command: chdir=/home/ubuntu/github docker build -t jenkins-master -f Dockerfile .
+
+    - name: ' Running Jenkins Docker Container'
+      command: docker run -p 8080:8080 -d --name=jenkins-master jenkins-master
+
