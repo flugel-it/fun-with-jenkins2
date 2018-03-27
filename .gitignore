@@ -1,1 +1,10 @@
-id_rsa
+# all swap files
+*.swp
+
+*.retry
+
+*/*tfstate*
+inventory
+
+.idea
+*.gradle
