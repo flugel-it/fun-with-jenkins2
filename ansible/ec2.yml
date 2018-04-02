@@ -10,7 +10,7 @@
    vars:
       instance_type: t2.micro
       security_group: ansible-webserver 
-      image: ami-fcc4db98 # This is an AMI for Ubuntu 16
+      image: ami-43a15f3e  # This is an AMI for Ubuntu 16
       keypair: awstest # This is the key you imported to AWS Key Pair Console
       region: eu-west-2
       count: 1
@@ -50,16 +50,8 @@
                       wait=true 
                       region={{ region }} 
                       keypair={{ keypair }}
-                      count={{count}}
+                      count={{ count }}
         register: ec2
-
-      - name: Add the newly created EC2 instance(s) to the local host group (located inside the directory)
-        local_action: lineinfile 
-                      dest="./hosts" 
-                      regexp={{ item.public_ip }} 
-                      insertafter="[webserver]" line={{ item.public_ip }}
-        with_items: "{{ ec2.instances }}"
-
 
       - name: Wait for SSH to come up
         local_action: wait_for 
@@ -74,8 +66,20 @@
         args:
           tags:
             Name: webserver
+
+      - name: Add the newly created EC2 instance IP to the ansible-playbook in-Memory inventory (webserver group)
+        add_host:
+          name: "{{ item.public_ip }}"
+          groups: webserver
+        with_items: "{{ ec2.instances }}"
      
-     
+      - name: Add the newly created EC2 instance IP to the local host inventory file (stored in your current directory)
+        local_action: lineinfile
+                      dest="hosts"
+                      insertafter="webserver"
+                      line={{ item.public_ip }}
+        with_items: "{{ ec2.instances }}"
        
       - name: run another play
         command: ansible-playbook /etc/ansible/jenkins.yml
+
