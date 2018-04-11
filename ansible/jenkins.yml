@@ -6,44 +6,43 @@
   gather_facts: no
   pre_tasks:
 
-    - name: 'Updating Ubuntu Repository'
+    - name: Updating Ubuntu Repository
       raw: apt update -y
 
-    - name: 'Installing Python'
+    - name: Installing Python
       raw: apt install python -y
 
-    - name: 'Updating Ubuntu Repository'
-      apt:
-        update_cache: yes
-
-    - name: 'Adding Docker APT Key'
+    - name: Adding Docker APT Key
       apt_key:
         url: https://download.docker.com/linux/ubuntu/gpg
         state: present
 
-    - name: 'Updating Ubuntu Repository'
+    - name: Installing Docker CE
       apt:
         update_cache: yes
-
-    - name: 'Installing Docker CE'
-      apt:
         name: docker.io
         state: present
 
-    - name: 'Creating github directory'
+    - name: Creating github directory
       file:
         path: /home/ubuntu/github
         state: directory
 
-    - name: 'Cloning Git Repository'
+    - name: Cloning Git Repository
       git:
-        repo: 'https://github.com/barbosacisco/fun-with-jenkins2.git'
+        repo: https://github.com/barbosacisco/fun-with-jenkins2.git
         dest: /home/ubuntu/github
         clone: yes
 
-    - name: 'Pulling Jenkins Image'
+    - name: Pulling Jenkins Image
       command: chdir=/home/ubuntu/github docker build -t jenkins-master -f Dockerfile .
 
-    - name: 'Running Jenkins Docker Container'
+    - name: Running Jenkins Docker Container
       command: docker run -p 8080:8080 -d --name=jenkins-master jenkins-master
+
+    - name: Add last webserver with Jenkins to the jenkins_servers group in the local host inventory file (stored in your current directory)
+      local_action: lineinfile
+                    dest="hosts"
+                    insertafter="jenkins_servers"
+                    line={{ groups['webserver'][-1] }}
 

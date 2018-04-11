@@ -3,9 +3,11 @@
 ### How to use it:
 
 ```
-docker build -t jenkins:latest .
-docker run -p 8080:8080  jenkins:latest
+sudo docker build -t jenkins .
+sudo docker run -p 8080:8080 jenkins
 ```
+Latest version is pulled by default.
+
 
 ### How to install Docker in Ubuntu 16.04.
 
@@ -69,7 +71,7 @@ $ sudo docker pull jenkins
 $ sudo docker run -p 8080:8080 --name=jenkins-master jenkins
 ```
 
-You are telling docker to run Jenkins image on port 8079 and setting up the container name.
+You are telling docker to run Jenkins image on port 8080 and setting up the container name.
 
 You may now have your Jenkins up and running, follow the instructions to finish Jenkins installation on the Web Interface.
 
@@ -78,12 +80,19 @@ Open your browser and type : http://yourmachineip:8080 , and you may have Jenkin
 
 **Additional Docker useful commands:**
 
+To list:
 ```
 $ sudo docker container ls -all
-
+or just:
+$ sudo docker ps -a
+```
+To remove:
+```
 $ sudo docker container rm "container_id"
 
 ```
+
+
 
 
 ### References
@@ -105,9 +114,10 @@ Pre-requisites:
 To set up a " Control Machine ", make sure to have the required software installed:
 
 - Ansible
-- Python
+- Python (2.7.x)
 - Python Pip
 - Boto (Python Module)
+- Boto3 (Python Module)
 - AWS CLI
 
 To proceed with the installation:
@@ -123,6 +133,7 @@ $ sudo apt install python-pip
 
 $ sudo pip install --upgrade pip
 $ sudo pip install boto
+$ sudo pip install boto3
 $ sudo pip install awscli
 ```
 
@@ -135,7 +146,7 @@ $ sudo ssh-keygen
 Now, in your AWS Web Console:
 
 - Import the SSH public key (id_rsa.pub) to KEY PAIR Console.
-- In IAM Conrole create an IAM user and give permissions to create and control AWS resources. (Reference: https://www.youtube.com/watch?v=Ul6FW4UANGc)
+- In IAM Console create an IAM user and give permissions to create and control AWS resources. (Reference: https://www.youtube.com/watch?v=Ul6FW4UANGc)
 
 The IAM Console will provide you the following credentials:
 
@@ -175,29 +186,62 @@ aws_access_key_id = your_key_id
 aws_secret_access_key = your_secret_access_key
 ```
 
+Certain settings in Ansible are adjustable via a configuration file /etc/ansible/ansible.cfg
+In this github repo we already have a folder named ' ansible ' containing configuration files and playbooks.
+If you installed Ansible from a package manager (e.g. apt, dpkg, yum, rpm), the latest default ansible.cfg file should be already present in /etc/ansible directory. You can backup that file, before copying over ours:
 
-By default Ansible files are stored in: /etc/ansible.
+```
+$ sudo mv /etc/ansible/ansible.cfg /etc/ansible/ansible.cfg.orig
+$ sudo cp ~/fun-with-jenkins2/ansible/ansible.cfg /etc/ansible/
+```
 
-In this repo we  have a folder named ' ansible ' you may copy all the files and replace them in your Control Machine in /etc/ansible.
+Note, if Ansible was installed from pip or from sources, then /etc/ansible/ directory will not be present, so you will need to create it as root or using sudo. To simplify your test deployment, you could just copy our ansible files to /etc/ansible/ in your Control Machine, to be able to run ansible-playbook directly from that directory:
 
-You may change in ' ansible.cfg ' according to your set up:
+```
+$ sudo cp -a ~/fun-with-jenkins2/ansible /etc/ansible
+```
+
+But in this case, you will have to add more file permissions to the directory:
+```
+sudo chmod 777 /etc/ansible
+```
+The more secure way is instead to only copy ansible.cfg at the previous step (described above) and keep all the rest Ansible files in your user home directory.
+
+You may change ansible.cfg contents if needed according to your setup:
 
 ```
 host_key_checking = False
 remote_user = ubuntu
 private_key_file = ~/.ssh/id_rsa
+log_path = ~/.ansible/ansible.log
 ```
 
-The ansible playbook ' ec2.yml ' is the main playbook, in the end it calls ' jenkins.yml ' playbook. You may change configuration according to your will regarding the AWS VPS region, instance type, security group name, ssh keypair name, the ports you want to be opened in AWS firewall and so on. The file is much self-explanatory.
+Note: if the Ansible inventory file (hosts) is copied to /etc/ansible, it becomes the default. Another approach is
+ use "-i" option explicitely when running 'ansible-playbook' command to specify any other inventory file path.
 
-Jenkins file may contain some configurations you might also want to change like:  ' remote_user ' and 'hosts'.
+The ansible playbook ' ec2.yml ' is the main playbook, in the end it calls ' jenkins.yml ' playbook. You may change configuration according to your will regarding the AWS VPS region, Ubuntu AMI id, instance type, security group name, ssh keypair name, the ports you want to be opened in AWS firewall and so on. The file is much self-explanatory.
 
-After changing everything accordingly you may run the playbook by issuing :
+The following AWS AMI id is called in ec2.yml:
+AMI ID: ami-43a15f3e
+AMI Name:  ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-20180306
+Source: 099720109477/ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-20180306
+Description:
+Canonical, Ubuntu, 16.04 LTS, amd64 xenial image build on 2018-03-06
+Ubuntu Server 16.04 LTS (HVM),EBS General Purpose (SSD) Volume Type.
+Support available from Canonical (http://www.ubuntu.com/cloud/services).
+Free tier eligible
+
+jenkins.yml file contains some configurations you might also want to change if needed: ' remote_user ' and 'hosts'.
+
+After setting everything accordingly you may run the playbook by issuing in your ansible directory:
 
 ```
 # sudo ansible-playbook ec2.yml -vvvv
 ```
 
+In this case, it will parse /etc/ansible/hosts inventory file.
+Use 'ansible-inventory --graph' to explore hosts.
+Log is written to ~/.ansible/ansible.log
 Use the ' -vvvv ' for verbose.
 
 When the playbook is over it shows you a RECAP, then you can just check if Jenkins is running by collecting the public ip address of your AWS VPS, or dns, going to your browser and issuing the following command : http://x.x.x.x:8080.
