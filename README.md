@@ -249,3 +249,31 @@ When the playbook is over it shows you a RECAP, then you can just check if Jenki
 Jenkins was set to run in port 8080. If you are presented with a Jenkins set up web interface, everything is working as supposed to.
 
 
+### Using with Vagrant and Digital Ocean:
+
+
+Pre-requisites:
+
+- Create an Digital Ocean account;
+- Setup an API key;
+- Setup an ssh key;
+
+
+```
+
+$ sudo apt install vagrant-digitalocean -y
+$ sudo apt install ansible -y
+
+```
+After that you just need to run:
+```
+$ vagrant up
+```
+
+Provisioning script will be executed and jenkins via docker will be deployed.
+
+
+
+Jenkins was set to run in port 8080. According to this. You are presented with a Jenkins interface and you will be able to log in using admin:admin. If this is true everything is working as supposed to.
+
+Open your browser and type : http://yourmachineip:8080, and you may have Jenkins web interface.
