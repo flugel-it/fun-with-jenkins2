@@ -276,5 +276,8 @@ Jenkins was set to run in port 8080. If you are presented with a Jenkins set up 
     ```
     vagrant up
     ```
+
+### Step 5
+    Go to http://localhost:80 
     
 
