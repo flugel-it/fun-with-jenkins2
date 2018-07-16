@@ -249,3 +249,32 @@ When the playbook is over it shows you a RECAP, then you can just check if Jenki
 Jenkins was set to run in port 8080. If you are presented with a Jenkins set up web interface, everything is working as supposed to.
 
 
+
+## Running Jenkins on Vagrant
+### Step 1
+
+    Enable virtualization on BIOS
+        Example #1 : https://goo.gl/djdS2h
+        
+        Example #2 : https://goo.gl/QoUKbJ
+### Step 2
+    Install virtualbox and its dependecies
+        https://goo.gl/9eD4n2
+### Step 3
+    Install vagrant and its dependencies:
+        In this case, we are gonna install vagrant on a 64bit enviroment
+
+        ```
+        $ sudo wget https://releases.hashicorp.com/vagrant/2.1.2/vagrant_2.1.2_x86_64.deb && sudo dpkg -i vagrant_2.1.2_x86_64.deb && rm -rf vagrant_2.1.2_x86_64.deb
+        ```
+### Step 4
+    Go to vagrant folder
+    ```
+    $ cd vagrant
+    ```
+    Then run:
+    ```
+    vagrant up
+    ```
+    
+
