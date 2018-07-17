@@ -2,26 +2,29 @@ Vagrant.configure('2') do |config|
 
   # Declaring VM Name 
   config.vm.define "webserver" do |config|
-
-
-  # Define Digital Ocean Provider Parameters 
-        config.vm.provider :digital_ocean do |provider, override|
-    	override.ssh.private_key_path = '~/.ssh/id_rsa'
-        override.vm.box = 'digital_ocean'
-        override.nfs.functional = false
-        provider.token = '9bae5c3965187813e1b6ba18122108657bad7488befd1780dcacd66bde3a3ecc'
-        provider.image = 'ubuntu-16-04-x64'
-        provider.region = 'nyc1'
-        provider.size = '512mb'
-	provider.ssh_key_name = 'dell-laptop'
-      end
  
+ # Define Ubuntu Version 
+  config.vm.box = "ubuntu/xenial64"
+
+# Define Provider
+  config.vm.provider "virtualbox" do |vb|
+    #   # Display the VirtualBox GUI when booting the machine (Debug)
+    #   vb.gui = true
+    #
+    # Customize the amount of memory on the VM:
+    vb.memory = "1024"
+
+    #Fix Port Forwarding 
+
+    config.vm.network "forwarded_port", guest: 8080, host: 8080,
+    auto_correct: true
+
+  end
 
   # Enable provisioning with Ansible.
   config.vm.provision "ansible" do |ansible|
     ansible.playbook = "ansible/jenkins.yml"
 end
-
 
 end
 end
