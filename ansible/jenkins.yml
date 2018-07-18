@@ -40,9 +40,4 @@
     - name: Running Jenkins Docker Container
       command: docker run -p 8080:8080 -d --name=jenkins-master jenkins-master
 
-    - name: Add last webserver with Jenkins to the jenkins_servers group in the local host inventory file (stored in your current directory)
-      local_action: lineinfile
-                    dest="hosts"
-                    insertafter="jenkins_servers"
-                    line={{ groups['webserver'][-1] }}
 
