@@ -1,0 +1,32 @@
+---
+
+- hosts: webserver
+  become: true
+  remote_user: vagrant
+  gather_facts: no
+  pre_tasks:
+
+    # - name: Updating....
+    #   raw: sudo apt-get update -y
+
+    - name: Downloading Dependencies...
+      raw: sudo apt-get install -y software-properties-common debconf-i18n
+    - name: Adding repositories....
+      raw: add-apt-repository -y ppa:webupd8team/java
+    - name: Updating....
+      raw: sudo apt-get update -y
+    - name: Installing Java....
+      raw: echo "oracle-java8-installer shared/accepted-oracle-license-v1-1 select true" | sudo debconf-set-selections
+    - name: Installing Java....
+      raw: sudo apt-get install -y oracle-java8-installer
+    - name: Creating jenkins folder
+      raw: mkdir ~/jenkins
+    - name: Downloading jenkins....
+      raw: wget http://mirrors.jenkins.io/war-stable/latest/jenkins.war -P ~/jenkins
+    - name: Granting permissions...
+      raw: chmod 777 ~/jenkins/jenkins.war
+    - name: Executing jenkins...
+      raw: java -jar ~/jenkins/jenkins.
+    - shell: cat /root/.jenkins/secrets/initialAdminPassword
+          register: password
+    - debug: msg="the echo was {{ password.stdout }}"
